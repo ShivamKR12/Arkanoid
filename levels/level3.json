@@ -1,0 +1,502 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 1,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 2,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 3,
+    "y": 0,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 5,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 6,
+    "y": 0,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 7,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 8,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 9,
+    "y": 0,
+    "color": [
+      255,
+      0,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 0,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 1,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 2,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 4,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 6,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 7,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 8,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 9,
+    "y": 1,
+    "color": [
+      255,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 0,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 1,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 3,
+    "y": 2,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 5,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 7,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 8,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 9,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 0,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 1,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 2,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 3,
+    "y": 3,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 4,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 5,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 6,
+    "y": 3,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 8,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 9,
+    "y": 3,
+    "color": [
+      255,
+      165,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 0,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 1,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 2,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 3,
+    "y": 4,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 5,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 6,
+    "y": 4,
+    "color": [
+      255,
+      255,
+      255
+    ],
+    "type": "unbreakable"
+  },
+  {
+    "x": 7,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 8,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 9,
+    "y": 4,
+    "color": [
+      0,
+      255,
+      0
+    ],
+    "type": "breakable"
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "color": [
+      0,
+      255,
+      255
+    ],
+    "type": "breakable"
+  }
+]
