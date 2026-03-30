@@ -12,7 +12,7 @@ import pygame
 import pygame.base
 import asyncio
 
-from powerups import PowerUp
+from Powerups import PowerUp
 from levels import load_level
 from bricks import Brick
 from ui import show_start_screen, show_level_message, draw_top_bar, show_end_screen
