@@ -26,4 +26,3 @@ class Brick:
             self.color = self.original_color  # Change color at last hit
 
         return self.hit_points <= 0  # True if brick is destroyed
-

@@ -1,3 +1,9 @@
+# /// script
+# dependencies = [
+#     "pygame-ce",
+# ]
+# ///
+
 import math
 import random
 import sys
@@ -6,7 +12,7 @@ import pygame
 import pygame.base
 import asyncio
 
-from Powerups import PowerUp
+from powerups import PowerUp
 from levels import load_level
 from bricks import Brick
 from ui import show_start_screen, show_level_message, draw_top_bar, show_end_screen
@@ -20,71 +26,73 @@ SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Arkanoid")
 
-game_mode = show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT)
-show_level_message(screen, 1, SCREEN_WIDTH, SCREEN_HEIGHT)
-
-original_paddle_width = 120 if game_mode == 'hard' else 200
-ball_speed = 10 if game_mode == 'hard' else 5
-
-current_level = 1
-win = False
-final_win = False
-UI_HEIGHT = 50
-
-#Sounds
-sound_path = os.path.join('assets', 'sounds', 'brick_hit.ogg')
-brick_sound = pygame.mixer.Sound(sound_path)
-unbr_sound_path = os.path.join('assets', 'sounds', 'unbreakable_hit.ogg')
-unbreakable_sound = pygame.mixer.Sound(unbr_sound_path)
-gun_sound_path = os.path.join('assets', 'sounds', 'gun_shot.ogg')
-gun_sound = pygame.mixer.Sound(gun_sound_path)
-powerup_path = os.path.join('assets', 'sounds', 'collect_powerup.ogg')
-powerup_sound = pygame.mixer.Sound(powerup_path)
-
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-
-paddle = Paddle(
-    SCREEN_WIDTH // 2 - original_paddle_width // 2,
-    SCREEN_HEIGHT - 40,
-    original_paddle_width,
-    10,  # paddle height
-    SCREEN_WIDTH
-)
-# paddle_speed = 10
-
-ball_radius = 8
-balls = [{
-    'rect': pygame.Rect(
-        paddle.rect.centerx - ball_radius,
-        paddle.rect.top - ball_radius * 2 - 2,
-        ball_radius * 2,
-        ball_radius * 2
-    ),
-    'speed_x': ball_speed,
-    'speed_y': -ball_speed
-}]
-
-brick_cols = 10
-brick_width = SCREEN_WIDTH // brick_cols
-brick_height = 30
-bricks = load_level(f"level{current_level}.json", brick_width, brick_height, UI_HEIGHT)
-
-score = 0
-lives = 3
-expand_active = False
-expand_end_time = 0
-font = pygame.font.Font(None, 36)
-hit_bricks = []
-powerups = []
-
-clock = pygame.time.Clock()
-running = True
-
 async def main():
+    global game_mode
     global running, win, final_win, lives, score, current_level
     global balls, bricks, powerups, expand_active, expand_end_time
+
+    game_mode = await show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+    await show_level_message(screen, 1, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    original_paddle_width = 120 if game_mode == 'hard' else 200
+    ball_speed = 10 if game_mode == 'hard' else 5
+
+    current_level = 1
+    win = False
+    final_win = False
+    UI_HEIGHT = 50
+
+    #Sounds
+    sound_path = os.path.join('assets', 'sounds', 'brick_hit.ogg')
+    brick_sound = pygame.mixer.Sound(sound_path)
+    unbr_sound_path = os.path.join('assets', 'sounds', 'unbreakable_hit.ogg')
+    unbreakable_sound = pygame.mixer.Sound(unbr_sound_path)
+    gun_sound_path = os.path.join('assets', 'sounds', 'gun_shot.ogg')
+    gun_sound = pygame.mixer.Sound(gun_sound_path)
+    powerup_path = os.path.join('assets', 'sounds', 'collect_powerup.ogg')
+    powerup_sound = pygame.mixer.Sound(powerup_path)
+
+
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+
+    paddle = Paddle(
+        SCREEN_WIDTH // 2 - original_paddle_width // 2,
+        SCREEN_HEIGHT - 40,
+        original_paddle_width,
+        10,  # paddle height
+        SCREEN_WIDTH
+    )
+    # paddle_speed = 10
+
+    ball_radius = 8
+    balls = [{
+        'rect': pygame.Rect(
+            paddle.rect.centerx - ball_radius,
+            paddle.rect.top - ball_radius * 2 - 2,
+            ball_radius * 2,
+            ball_radius * 2
+        ),
+        'speed_x': ball_speed,
+        'speed_y': -ball_speed
+    }]
+
+    brick_cols = 10
+    brick_width = SCREEN_WIDTH // brick_cols
+    brick_height = 30
+    bricks = load_level(f"level{current_level}.json", brick_width, brick_height, UI_HEIGHT)
+
+    score = 0
+    lives = 3
+    expand_active = False
+    expand_end_time = 0
+    font = pygame.font.Font(None, 36)
+    hit_bricks = []
+    powerups = []
+
+    clock = pygame.time.Clock()
+    running = True
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -224,7 +232,7 @@ async def main():
                 expand_active = False
                 paddle.rect.width = original_paddle_width
                 paddle.rect.centerx = SCREEN_WIDTH // 2
-                show_level_message(screen, current_level, SCREEN_WIDTH, SCREEN_HEIGHT)
+                await show_level_message(screen, current_level, SCREEN_WIDTH, SCREEN_HEIGHT)
             except FileNotFoundError:
                 final_win = True
                 win = True
@@ -249,10 +257,11 @@ async def main():
         paddle.update_bullets(screen, bricks)
         pygame.display.flip()
         clock.tick(60)
+
         await asyncio.sleep(0)
 
-if __name__ == "__main__":
-    asyncio.run(main())
-    show_end_screen(screen, final_win, SCREEN_WIDTH, SCREEN_HEIGHT)
-    pygame.quit()
-    sys.exit()
+
+asyncio.run(main())
+show_end_screen(screen, final_win, SCREEN_WIDTH, SCREEN_HEIGHT)
+pygame.quit()
+sys.exit()

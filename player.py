@@ -88,6 +88,7 @@ class Paddle:
                     if destroyed:
                         del bricks[hit_index]
                 self.bullets.remove(bullet)
+    
     def update(self):
         if self.gun_active and pygame.time.get_ticks() > self.gun_end_time:
             self.gun_active = False

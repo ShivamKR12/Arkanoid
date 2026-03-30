@@ -1,7 +1,6 @@
-import pygame
-import sys
+import pygame, sys, asyncio
 
-def show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
+async def show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
     font_big = pygame.font.Font(None, 64)
     font_small = pygame.font.Font(None, 36)
 
@@ -25,8 +24,10 @@ def show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
                     return 'easy'
                 elif event.key == pygame.K_h:
                     return 'hard'
+    
+        await asyncio.sleep(0)  # Just to make this function async-compatible
 
-def show_level_message(screen, level_number, SCREEN_WIDTH, SCREEN_HEIGHT):
+async def show_level_message(screen, level_number, SCREEN_WIDTH, SCREEN_HEIGHT):
     font = pygame.font.Font(None, 72)
     text = font.render(f"Level {level_number}", True, (255, 255, 255))
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -50,6 +51,8 @@ def show_level_message(screen, level_number, SCREEN_WIDTH, SCREEN_HEIGHT):
         screen.blit(overlay, (0, 0))
         pygame.display.flip()
         clock.tick(60)
+
+        await asyncio.sleep(0)  # Allow other async tasks to run
 
 def draw_top_bar(screen, score, lives, SCREEN_WIDTH, UI_HEIGHT):
     font = pygame.font.Font(None, 36)
