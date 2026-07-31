@@ -5,7 +5,7 @@ import math
 import random
 import asyncio
 
-from game_objects import Paddle, Ball, Brick, PowerUp
+from game_objects import Paddle, Ball, PowerUp
 from levels import load_level
 from ui import show_start_screen, show_level_message, draw_top_bar, show_end_screen
 
@@ -26,6 +26,8 @@ class Game:
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
 
+        self.HIGH_SCORE_FILE = "highscore.txt"
+
         # --- Game State ---
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption("Arkanoid")
@@ -36,6 +38,7 @@ class Game:
         self.lives = 3
         self.current_level = 1
         self.final_win = False
+        self.high_score = self.load_high_score()
 
         # --- Game Objects ---
         self.paddle = None
@@ -45,6 +48,16 @@ class Game:
 
         # --- Assets ---
         self.sounds = self._load_sounds()
+
+    def load_high_score(self):
+        if os.path.exists(self.HIGH_SCORE_FILE):
+            with open(self.HIGH_SCORE_FILE, 'r') as f:
+                return int(f.read() or 0)
+        return 0
+
+    def save_high_score(self):
+        with open(self.HIGH_SCORE_FILE, 'w') as f:
+            f.write(str(self.high_score))
 
     def _load_sounds(self):
         return {
@@ -93,7 +106,7 @@ class Game:
         running = True
         while running:
             if self.state == "START":
-                self.game_mode = await show_start_screen(self.screen, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+                self.game_mode = await show_start_screen(self.screen, self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.high_score)
                 self.current_level = 1
                 self.score = 0
                 self.lives = 3
@@ -110,7 +123,12 @@ class Game:
                 self.draw()
 
             elif self.state == "GAME_OVER":
-                show_end_screen(self.screen, self.final_win, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+                new_high_score = self.score > self.high_score
+                if new_high_score:
+                    self.high_score = self.score
+                    self.save_high_score()
+
+                show_end_screen(self.screen, self.final_win, self.score, new_high_score, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
                 self.state = "START" # Return to start screen
 
             for event in pygame.event.get():
@@ -150,7 +168,8 @@ class Game:
         destroyed_bricks_by_bullet = self.paddle.update_bullets(self.bricks)
         if destroyed_bricks_by_bullet:
             self.sounds['brick_hit'].play()
-            self.score += 10 * len(destroyed_bricks_by_bullet)
+            for brick in destroyed_bricks_by_bullet:
+                self.score += brick.score_value
 
         # --- Update Balls ---
         for ball in self.balls[:]:
@@ -173,9 +192,7 @@ class Game:
                 self.paddle.handle_ball_collision(ball)
 
             # Brick collisions
-            hit_brick = self.handle_brick_collision(ball, prev_rect)
-            if hit_brick:
-                self.score += 10
+            self.handle_brick_collision(ball, prev_rect)
 
             # Out of bounds
             if ball.rect.top > self.SCREEN_HEIGHT:
@@ -211,6 +228,7 @@ class Game:
                 if random.random() < 0.3: # 30% chance to drop powerup
                     power_type = random.choice(['expand', 'life', 'multiball', 'gun'])
                     self.powerups.append(PowerUp(brick.rect.centerx, brick.rect.y, power_type))
+                self.score += brick.score_value
                 del self.bricks[hit_index]
 
         return brick

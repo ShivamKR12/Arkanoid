@@ -1,17 +1,20 @@
 import pygame, sys, asyncio
 
 
-async def show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT):
+async def show_start_screen(screen, SCREEN_WIDTH, SCREEN_HEIGHT, high_score):
     font_big = pygame.font.Font(None, 64)
     font_small = pygame.font.Font(None, 36)
+    font_hs = pygame.font.Font(None, 42)
 
     title = font_big.render("Arkanoid Fire Ball", True, (255, 140, 0))
     easy = font_small.render("Press E for Easy Mode", True, (200, 200, 200))
     hard = font_small.render("Press H for Hard Mode", True, (255, 100, 100))
+    high_score_text = font_hs.render(f"High Score: {high_score}", True, (255, 215, 0))
 
     while True:
         screen.fill((20, 20, 20))
         screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 200))
+        screen.blit(high_score_text, (SCREEN_WIDTH // 2 - high_score_text.get_width() // 2, 270))
         screen.blit(easy, (SCREEN_WIDTH // 2 - easy.get_width() // 2, 300))
         screen.blit(hard, (SCREEN_WIDTH // 2 - hard.get_width() // 2, 350))
         pygame.display.flip()
@@ -71,15 +74,24 @@ def draw_top_bar(screen, score, lives, SCREEN_WIDTH, UI_HEIGHT):
     screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, 10))
 
 
-def show_end_screen(screen, final_win, SCREEN_WIDTH, SCREEN_HEIGHT):
+def show_end_screen(screen, final_win, score, new_high_score, SCREEN_WIDTH, SCREEN_HEIGHT):
     screen.fill((0, 0, 0))
-    font = pygame.font.Font(None, 48)
+    font_large = pygame.font.Font(None, 64)
+    font_medium = pygame.font.Font(None, 48)
 
     if final_win:
-        end_text = font.render("You Beat All Levels!", True, (0, 255, 0))
+        end_text = font_large.render("You Beat All Levels!", True, (0, 255, 0))
     else:
-        end_text = font.render("Game Over!", True, (255, 0, 0))
+        end_text = font_large.render("Game Over!", True, (255, 0, 0))
 
-    screen.blit(end_text, (SCREEN_WIDTH // 2 - end_text.get_width() // 2, SCREEN_HEIGHT // 2))
+    score_text = font_medium.render(f"Final Score: {score}", True, (255, 255, 255))
+
+    screen.blit(end_text, (SCREEN_WIDTH // 2 - end_text.get_width() // 2, SCREEN_HEIGHT // 2 - 50))
+    screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + 20))
+
+    if new_high_score:
+        new_hs_text = font_medium.render("New High Score!", True, (255, 215, 0))
+        screen.blit(new_hs_text, (SCREEN_WIDTH // 2 - new_hs_text.get_width() // 2, SCREEN_HEIGHT // 2 + 70))
+
     pygame.display.flip()
     pygame.time.wait(3000)

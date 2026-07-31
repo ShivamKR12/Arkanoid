@@ -158,6 +158,14 @@ class Brick:
         self.brick_type = brick_type
         self.original_color = original_color or color
         self.hit_points = 2 if brick_type == 'multi' else 1
+        self.score_value = self.get_score_value()
+
+    def get_score_value(self):
+        if self.brick_type == 'multi':
+            return 25
+        elif self.brick_type == 'breakable':
+            return 10
+        return 0
 
     def draw(self, screen):
         if self.brick_type == 'unbreakable':
