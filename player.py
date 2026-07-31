@@ -1,6 +1,6 @@
 import pygame
-import time
 import os
+
 
 class Paddle:
     def __init__(self, x, y, width, height, screen_width):
@@ -35,9 +35,9 @@ class Paddle:
         # Optional: flash lines for gun firing
         if self.gun_active and pygame.time.get_ticks() - self.last_shot_time < 100:
             pygame.draw.line(screen, (255, 255, 0), (self.rect.left + 5, self.rect.top),
-                                 (self.rect.left + 5, self.rect.top - 10), 2)
+                            (self.rect.left + 5, self.rect.top - 10), 2)
             pygame.draw.line(screen, (255, 255, 0), (self.rect.right - 9, self.rect.top),
-                                 (self.rect.right - 9, self.rect.top - 10), 2)
+                            (self.rect.right - 9, self.rect.top - 10), 2)
 
     def activate_expand(self):
         self.rect.width = int(self.original_width * 1.5)
@@ -88,7 +88,7 @@ class Paddle:
                     if destroyed:
                         del bricks[hit_index]
                 self.bullets.remove(bullet)
-    
+
     def update(self):
         if self.gun_active and pygame.time.get_ticks() > self.gun_end_time:
             self.gun_active = False

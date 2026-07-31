@@ -3,13 +3,15 @@ import json
 import sys
 import os
 
+
 pygame.init()
 screen = pygame.display.set_mode((600, 700), pygame.RESIZABLE)
 pygame.display.set_caption("Arkanoid Level Editor")
 clock = pygame.time.Clock()
+font = pygame.font.Font(None, 32)
 
-ROWS, COLS = 10, 10
-CELL_WIDTH = screen.get_width() // COLS
+ROWS, COLUMNS = 10, 10
+CELL_WIDTH = screen.get_width() // COLUMNS
 CELL_HEIGHT = 40
 
 colors = [
@@ -22,17 +24,13 @@ colors = [
 ]
 color_index = 0
 brick_type = "breakable"
-
 level_number = 1
-font = pygame.font.Font(None, 32)
-
 show_help = True  # Toggle control instructions
-
 grid = {}  # (x, y) => {'color': (r,g,b), 'type': 'breakable'}
 
 def draw_grid():
     for y in range(ROWS):
-        for x in range(COLS):
+        for x in range(COLUMNS):
             rect = pygame.Rect(x * CELL_WIDTH, y * CELL_HEIGHT, CELL_WIDTH - 2, CELL_HEIGHT - 2)
             if (x, y) in grid:
                 brick = grid[(x, y)]
@@ -87,7 +85,7 @@ while running:
             "Controls:",
             "Left Click   - Place brick",
             "Right Click  - Remove brick",
-            "1–6          - Select color",
+            "1-6          - Select color",
             "B            - Breakable",
             "M            - Multi-hit",
             "U            - Unbreakable",
@@ -110,7 +108,7 @@ while running:
         
         elif event.type == pygame.VIDEORESIZE:
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            CELL_WIDTH = screen.get_width() // COLS
+            CELL_WIDTH = screen.get_width() // COLUMNS
             CELL_HEIGHT = screen.get_height() // ROWS
 
         elif event.type == pygame.MOUSEBUTTONDOWN:

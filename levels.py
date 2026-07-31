@@ -3,6 +3,7 @@ import json
 import os
 from bricks import Brick
 
+
 def load_level(filename, brick_width, brick_height, UI_HEIGHT):
     with open(os.path.join("levels", filename)) as f:
         data = json.load(f)

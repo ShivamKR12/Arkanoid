@@ -1,5 +1,6 @@
 import pygame
 
+
 class PowerUp:
     def __init__(self, x, y, type):
         self.type = type  # 'expand', 'life', 'multiball', 'gun'
