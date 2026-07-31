@@ -94,10 +94,9 @@ Arkanoid/
 │   ├── level1.json
 │   └── ...
 ├── main.py                       # Main game entry point
-├── player.py                     # Paddle class
-├── bricks.py                     # Brick class
+├── game_manager.py               # Game state management
+├── game_objects.py               # Game objects (bricks, paddle, ball)
 ├── levels.py                     # Level loading logic
-├── Powerups.py                   # PowerUp class
 ├── ui.py                         # UI functions (menus, HUD)
 ├── Level-Editor.py               # Standalone level editor script
 ├── pygbag.ini                    # Configuration for the pygbag web build

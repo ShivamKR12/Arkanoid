@@ -1,27 +1,21 @@
-import pygame
 import json
 import os
-from bricks import Brick
+from game_objects import Brick
 
 
 def load_level(filename, brick_width, brick_height, UI_HEIGHT):
     with open(os.path.join("levels", filename)) as f:
         data = json.load(f)
         bricks = []
-        for brick in data:
-            x = brick['x']
-            y = brick['y']
-            color = tuple(brick['color'])
-            brick_type = brick['type']
-
+        for b_data in data:
             brick = Brick(
-                x * brick_width,
-                UI_HEIGHT + y * brick_height,
+                b_data['x'] * brick_width,
+                UI_HEIGHT + b_data['y'] * brick_height,
                 brick_width - 2,
                 brick_height - 2,
-                (255, 255, 255) if brick_type == 'multi' else color,
-                brick_type,
-                color
+                (255, 255, 255) if b_data['type'] == 'multi' else tuple(b_data['color']),
+                b_data['type'],
+                tuple(b_data['color'])
             )
             bricks.append(brick)
         return bricks
