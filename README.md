@@ -1,109 +1,100 @@
 # Arkanoid Fire Ball
 
-A modern take on the classic Arkanoid breakout game, built with Python and `pygame-ce`. This project features classic gameplay enhanced with power-ups, multiple levels, two difficulty modes, and a built-in level editor. It's also configured to be playable in a web browser using `pygbag`.
+<div align="center">
 
-## Features
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![pygame-ce](https://img.shields.io/badge/Library-pygame--ce-1D9BF0?logo=pygame&logoColor=white)
+![Web](https://img.shields.io/badge/Target-Web%20Game-FF5A5F)
+![itch.io](https://img.shields.io/badge/Publish-itch.io-FA5C5C?logo=itch.io&logoColor=white)
 
-- **Classic Arkanoid Gameplay**: Break bricks, control the paddle, and keep the ball in play.
-- **Multiple Levels**: Progress through increasingly challenging levels.
-- **Two Difficulty Modes**: Choose between 'Easy' and 'Hard' to match your skill level. Hard mode features a smaller paddle and a faster ball.
-- **Power-ups**: Catch falling power-ups to gain advantages:
-    - 🟢 **Expand (E)**: Increases the paddle size temporarily.
-    - ❤️ **Life (L)**: Grants an extra life (up to a maximum of 5).
-    - 🌐 **Multiball (M)**: Adds one or two extra balls to the screen.
-    - 🔫 **Gun (G)**: Allows the paddle to shoot bullets and destroy bricks for a limited time.
-- **Multiple Brick Types**:
-    - **Breakable**: Standard bricks that are destroyed in one hit.
-    - **Multi-hit**: Bricks that require two hits to be destroyed.
-    - **Unbreakable**: Indestructible bricks that serve as obstacles.
-- **Level Editor**: A simple, built-in tool (`Level-Editor.py`) to create, edit, and save your own custom levels.
-- **Web-Ready**: The included GitHub Actions workflow (`.github/workflows/pygbag.yml`) automatically builds the game for the web and deploys it to GitHub Pages.
+</div>
 
-## How to Play
+A colorful arcade-style Arkanoid clone built in Python with `pygame-ce` and prepared for browser deployment with `pygbag`.
 
-### Prerequisites
+## 🎮 Features
 
-Make sure you have Python installed. This project uses `pygame-ce`, which will be installed via `pip`.
+- Classic breakout gameplay with paddle control and bouncing ball physics
+- Multiple levels and difficulty modes
+- Power-ups: expand, extra life, multiball, and rapid-fire gun mode
+- Breakable, multi-hit, and unbreakable brick types
+- Built-in level editor for creating custom layouts
+- Browser-ready setup for `pygbag` and itch.io publishing
 
-### Running Locally
+## 🧪 Local Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/ShivamKR12/Arkanoid.git
-    cd Arkanoid
-    ```
+1. Clone the repo
+   ```bash
+   git clone https://github.com/your-user/Arkanoid.git
+   cd Arkanoid
+   ```
 
-2.  **Create a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    ```
+2. Create a virtual environment
+   ```bash
+   python -m venv venv
+   ```
 
-3.  **Install dependencies:**
-    ```bash
-    pip install pygame-ce
-    ```
+   Windows:
+   ```powershell
+   .\venv\Scripts\Activate.ps1
+   ```
 
-4.  **Run the game:**
-    ```bash
-    python main.py
-    ```
+3. Install dependencies
+   ```bash
+   pip install pygame-ce pygbag
+   ```
 
-### Web Version
+4. Run the game
+   ```bash
+   python main.py
+   ```
 
-The project is configured to be built and deployed to GitHub Pages automatically. You can play the latest version directly in your browser.
+5. Run the level editor
+   ```bash
+   python Level-Editor.py
+   ```
 
-## Controls
+## 🌐 Browser / itch.io Setup
 
-### In-Game
+This project is already structured to build as a web game using `pygbag`.
 
--   **Left/Right Arrow Keys**: Move the paddle left and right.
--   **Spacebar**: Shoot bullets when the 'Gun' power-up is active.
+### 1) Build for the web
 
-## Level Editor Usage
-
-To create or modify levels, run the level editor from your terminal:
+From the project root:
 
 ```bash
-python Level-Editor.py
+pygbag main.py
 ```
 
-The editor provides on-screen instructions for placing different types of bricks, saving/loading levels, and switching between levels.
+This generates a web build in the `build/` or exported web target folder depending on your `pygbag` version.
 
-### Editor Controls
+### 2) Test locally
 
--   **Left Click**: Place a brick of the selected type and color.
--   **Right Click**: Remove a brick.
--   **Keys 1-6**: Select brick color.
--   **B**: Set brick type to **B**reakable.
--   **M**: Set brick type to **M**ulti-hit.
--   **U**: Set brick type to **U**nbreakable.
--   **S**: **S**ave the current level layout to a JSON file.
--   **L**: **L**oad the layout for the current level number.
--   **C**: **C**lear the entire grid.
--   **Left/Right Arrow Keys**: Switch between level numbers to load/save.
--   **H**: Toggle the help/controls display.
+Open the generated HTML or serve the build using a simple local web server.
 
-## Project Structure
+## 🕹️ Controls
 
-```
+- Left / Right arrows: move paddle
+- Space: shoot when gun power-up is active
+- E / H: choose easy or hard difficulty on the title screen
+
+## 🏗️ Project Structure
+
+```text
 Arkanoid/
-├── .github/workflows/pygbag.yml  # GitHub Actions workflow for web build
-├── assets/sounds/                # Game sound effects
-├── levels/                       # JSON files for level layouts
-│   ├── level1.json
-│   └── ...
-├── main.py                       # Main game entry point
-├── game_manager.py               # Game state management
-├── game_objects.py               # Game objects (bricks, paddle, ball)
-├── levels.py                     # Level loading logic
-├── ui.py                         # UI functions (menus, HUD)
-├── Level-Editor.py               # Standalone level editor script
-├── pygbag.ini                    # Configuration for the pygbag web build
-├── README.md                     # This file
-└── LICENSE.md                    # MIT License
+├── main.py                  # game entry point
+├── game_manager.py          # main loop and game state
+├── game_objects.py          # Paddle, Ball, Brick, PowerUp classes
+├── levels.py                # level loader
+├── ui.py                    # in-game UI and menus
+├── Level-Editor.py          # class-based editor app
+├── levels/                  # level JSON files
+├── assets/                  # optional sounds/images
+├── pygbag.ini              # pygbag config
+├── README.md                # project docs
+├── LICENSE                  # licensing
+└── build/                   # generated web output
 ```
 
-## License
+## ✅ License
 
-The project is under the [MIT License](LICENSE)
+This project is released under the [MIT License](LICENSE).

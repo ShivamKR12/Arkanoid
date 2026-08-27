@@ -1,13 +1,13 @@
 import pygame
-import sys
 import os
 import math
 import random
 import asyncio
 
 from game_objects import Paddle, Ball, PowerUp
-from levels import load_level
-from ui import show_start_screen, show_level_message, draw_top_bar, show_end_screen
+from levels import LevelLoader
+from ui import GameUI
+
 
 class Game:
     def __init__(self):
@@ -32,8 +32,8 @@ class Game:
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption("Arkanoid")
         self.clock = pygame.time.Clock()
-        self.state = "START" # START, PLAYING, LEVEL_TRANSITION, GAME_OVER
-        self.game_mode = 'easy'
+        self.state = "START"
+        self.game_mode = "easy"
         self.score = 0
         self.lives = 3
         self.current_level = 1
@@ -45,37 +45,36 @@ class Game:
         self.balls = []
         self.bricks = []
         self.powerups = []
+        self.ui = GameUI(self.screen)
 
         # --- Assets ---
         self.sounds = self._load_sounds()
 
     def load_high_score(self):
         if os.path.exists(self.HIGH_SCORE_FILE):
-            with open(self.HIGH_SCORE_FILE, 'r') as f:
-                return int(f.read() or 0)
+            with open(self.HIGH_SCORE_FILE, "r") as high_score_file:
+                return int(high_score_file.read() or 0)
         return 0
 
     def save_high_score(self):
-        with open(self.HIGH_SCORE_FILE, 'w') as f:
-            f.write(str(self.high_score))
+        with open(self.HIGH_SCORE_FILE, "w") as high_score_file:
+            high_score_file.write(str(self.high_score))
 
     def _load_sounds(self):
         return {
-            'brick_hit': pygame.mixer.Sound(os.path.join('assets', 'sounds', 'brick_hit.ogg')),
-            'unbreakable_hit': pygame.mixer.Sound(os.path.join('assets', 'sounds', 'unbreakable_hit.ogg')),
-            'gun_shot': pygame.mixer.Sound(os.path.join('assets', 'sounds', 'gun_shot.ogg')),
-            'collect_powerup': pygame.mixer.Sound(os.path.join('assets', 'sounds', 'collect_powerup.ogg')),
+            "brick_hit": pygame.mixer.Sound(os.path.join("assets", "sounds", "brick_hit.ogg")),
+            "unbreakable_hit": pygame.mixer.Sound(os.path.join("assets", "sounds", "unbreakable_hit.ogg")),
+            "gun_shot": pygame.mixer.Sound(os.path.join("assets", "sounds", "gun_shot.ogg")),
+            "collect_powerup": pygame.mixer.Sound(os.path.join("assets", "sounds", "collect_powerup.ogg")),
         }
 
     def _setup_level(self, level_num):
-        # --- Reset game objects for the level ---
-        self.bricks = load_level(f"level{level_num}.json", self.BRICK_WIDTH, self.BRICK_HEIGHT, self.UI_HEIGHT)
+        self.bricks = LevelLoader.load(f"level{level_num}.json", self.BRICK_WIDTH, self.BRICK_HEIGHT, self.UI_HEIGHT)
         self.powerups.clear()
         self.balls.clear()
 
-        # --- Configure paddle and ball based on difficulty ---
-        paddle_width = 100 if self.game_mode == 'hard' else 150
-        self.ball_speed = 7 if self.game_mode == 'hard' else 5
+        paddle_width = 100 if self.game_mode == "hard" else 150
+        self.ball_speed = 7 if self.game_mode == "hard" else 5
 
         self.paddle = Paddle(
             self.SCREEN_WIDTH // 2 - paddle_width // 2,
@@ -106,7 +105,11 @@ class Game:
         running = True
         while running:
             if self.state == "START":
-                self.game_mode = await show_start_screen(self.screen, self.SCREEN_WIDTH, self.SCREEN_HEIGHT, self.high_score)
+                selected_mode = await self.ui.show_start_screen(self.high_score)
+                if selected_mode is None:
+                    running = False
+                    break
+                self.game_mode = selected_mode
                 self.current_level = 1
                 self.score = 0
                 self.lives = 3
@@ -114,7 +117,7 @@ class Game:
 
             elif self.state == "LEVEL_TRANSITION":
                 self._setup_level(self.current_level)
-                await show_level_message(self.screen, self.current_level, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+                await self.ui.show_level_message(self.current_level, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
                 self.state = "PLAYING"
 
             elif self.state == "PLAYING":
@@ -128,8 +131,8 @@ class Game:
                     self.high_score = self.score
                     self.save_high_score()
 
-                show_end_screen(self.screen, self.final_win, self.score, new_high_score, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
-                self.state = "START" # Return to start screen
+                self.ui.show_end_screen(self.final_win, self.score, new_high_score, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+                self.state = "START"
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -138,24 +141,22 @@ class Game:
             await asyncio.sleep(0)
 
         pygame.quit()
-        sys.exit()
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+                return
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if self.paddle.shoot():
-                        self.sounds['gun_shot'].play()
+                        self.sounds["gun_shot"].play()
 
     def update(self):
         keys = pygame.key.get_pressed()
         self.paddle.move(keys)
         self.paddle.update()
 
-        # --- Update Powerups ---
         for powerup in self.powerups[:]:
             powerup.move()
             if powerup.rect.colliderect(self.paddle.rect):
@@ -164,19 +165,16 @@ class Game:
             elif powerup.rect.top > self.SCREEN_HEIGHT:
                 self.powerups.remove(powerup)
 
-        # --- Update Bullets ---
         destroyed_bricks_by_bullet = self.paddle.update_bullets(self.bricks)
         if destroyed_bricks_by_bullet:
-            self.sounds['brick_hit'].play()
+            self.sounds["brick_hit"].play()
             for brick in destroyed_bricks_by_bullet:
                 self.score += brick.score_value
 
-        # --- Update Balls ---
         for ball in self.balls[:]:
             prev_rect = ball.rect.copy()
             ball.move()
 
-            # Wall collisions
             if ball.rect.left <= 0:
                 ball.rect.left = 0
                 ball.speed_x *= -1
@@ -187,22 +185,18 @@ class Game:
                 ball.rect.top = self.UI_HEIGHT
                 ball.speed_y *= -1
 
-            # Paddle collision
             if ball.rect.colliderect(self.paddle.rect) and prev_rect.bottom <= self.paddle.rect.top:
                 self.paddle.handle_ball_collision(ball)
 
-            # Brick collisions
             self.handle_brick_collision(ball, prev_rect)
 
-            # Out of bounds
             if ball.rect.top > self.SCREEN_HEIGHT:
                 self.balls.remove(ball)
 
         if not self.balls:
             self.reset_after_life_lost()
 
-        # --- Check for level clear ---
-        if not any(b.brick_type != 'unbreakable' for b in self.bricks):
+        if not any(b.brick_type != "unbreakable" for b in self.bricks):
             self.current_level += 1
             next_level_path = os.path.join("levels", f"level{self.current_level}.json")
             if os.path.exists(next_level_path):
@@ -219,14 +213,14 @@ class Game:
         brick = self.bricks[hit_index]
         ball.handle_collision(brick.rect, prev_ball_rect)
 
-        if brick.brick_type == 'unbreakable':
-            self.sounds['unbreakable_hit'].play()
+        if brick.brick_type == "unbreakable":
+            self.sounds["unbreakable_hit"].play()
         else:
-            self.sounds['brick_hit'].play()
+            self.sounds["brick_hit"].play()
             destroyed = brick.hit()
             if destroyed:
-                if random.random() < 0.3: # 30% chance to drop powerup
-                    power_type = random.choice(['expand', 'life', 'multiball', 'gun'])
+                if random.random() < 0.3:
+                    power_type = random.choice(["expand", "life", "multiball", "gun"])
                     self.powerups.append(PowerUp(brick.rect.centerx, brick.rect.y, power_type))
                 self.score += brick.score_value
                 del self.bricks[hit_index]
@@ -234,14 +228,14 @@ class Game:
         return brick
 
     def activate_powerup(self, power_type):
-        self.sounds['collect_powerup'].play()
-        if power_type == 'life' and self.lives < 5:
+        self.sounds["collect_powerup"].play()
+        if power_type == "life" and self.lives < 5:
             self.lives += 1
-        elif power_type == 'expand':
+        elif power_type == "expand":
             self.paddle.activate_expand()
-        elif power_type == 'gun':
+        elif power_type == "gun":
             self.paddle.activate_gun()
-        elif power_type == 'multiball':
+        elif power_type == "multiball":
             new_balls_count = random.choice([1, 2])
             for _ in range(new_balls_count):
                 angle_rad = math.radians(random.uniform(-45, 45))
@@ -258,7 +252,6 @@ class Game:
     def draw(self):
         self.screen.fill(self.BLACK)
 
-        # Draw game objects
         self.paddle.draw(self.screen)
         for ball in self.balls:
             ball.draw(self.screen)
@@ -267,10 +260,8 @@ class Game:
         for powerup in self.powerups:
             powerup.draw(self.screen)
 
-        # Draw UI
-        draw_top_bar(self.screen, self.score, self.lives, self.SCREEN_WIDTH, self.UI_HEIGHT)
+        self.ui.draw_top_bar(self.score, self.lives, self.SCREEN_WIDTH, self.UI_HEIGHT)
 
-        # Draw gun timer bar
         if self.paddle.gun_active:
             self.paddle.draw_gun_timer(self.screen, self.SCREEN_WIDTH, self.UI_HEIGHT)
 
