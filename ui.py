@@ -21,8 +21,8 @@ class GameUI:
 
             self.screen.blit(title, (self.screen.get_width() // 2 - title.get_width() // 2, 200))
             self.screen.blit(high_score_text, (self.screen.get_width() // 2 - high_score_text.get_width() // 2, 270))
-            self.screen.blit(easy, (self.screen.get_width() // 2 - easy.get_width() // 2, 300))
-            self.screen.blit(hard, (self.screen.get_width() // 2 - hard.get_width() // 2, 350))
+            self.screen.blit(easy, (self.screen.get_width() // 2 - easy.get_width() // 2, 350))
+            self.screen.blit(hard, (self.screen.get_width() // 2 - hard.get_width() // 2, 400))
             pygame.display.flip()
 
             for event in pygame.event.get():
