@@ -30,3 +30,14 @@ jobs:
       with:
         branch: gh-pages
         folder: build/web
+
+    - name: Publish to itch.io via Butler
+      uses: manleydev/butler-publish-itchio-action@v1.0.3
+      env:
+        BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+      with:
+        channel: 'html'
+        itch_user: 'shivamkr12'
+        itch_game: 'arkanoid'
+        package: 'build/web'
+        version: v${{ github.run_number }}
