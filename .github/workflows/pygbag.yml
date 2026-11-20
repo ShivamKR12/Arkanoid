@@ -6,6 +6,7 @@ on:
       - '**.py'
       - 'levels/**'
       - 'pygbag.ini'
+      - 'default.tmpl'
       - '.github/workflows/pygbag.yml'
   workflow_dispatch:
 
